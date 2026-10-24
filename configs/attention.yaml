@@ -1,0 +1,8 @@
+name: attention
+model: {type: attention, patch_size: 7, dim: 64, depth: 2, heads: 4, mlp_dim: 128, dropout: 0.1}
+device: auto
+seed: 42
+data_dir: data
+output_dir: results
+checkpoint_dir: checkpoints
+training: {epochs: 10, batch_size: 64, optimizer: {name: adam, learning_rate: 0.0005, weight_decay: 0.0001}}

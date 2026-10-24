@@ -1,0 +1,8 @@
+name: optimizer
+model: {type: mlp, hidden_dims: [128, 64], dropout: 0.1}
+device: auto
+seed: 42
+data_dir: data
+output_dir: results/optimizers
+checkpoint_dir: checkpoints/optimizers
+training: {epochs: 5, batch_size: 128, limit: 6000, optimizer: {name: adam, learning_rate: 0.001, momentum: 0.9}}

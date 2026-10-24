@@ -1,0 +1,5 @@
+name: linear
+model: {type: linear}
+seed: 42
+output_dir: results
+training: {learning_rate: 0.03, epochs: 300, batch_size: 32, l2: 0.001}

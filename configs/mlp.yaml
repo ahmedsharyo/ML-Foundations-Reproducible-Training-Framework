@@ -1,0 +1,8 @@
+name: mlp
+model: {type: mlp, hidden_dims: [256, 128], dropout: 0.1}
+device: auto
+seed: 42
+data_dir: data
+output_dir: results
+checkpoint_dir: checkpoints
+training: {epochs: 10, batch_size: 128, limit: null, optimizer: {name: adam, learning_rate: 0.001, weight_decay: 0.0001}}

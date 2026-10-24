@@ -1,12 +1,14 @@
 #!/usr/bin/env python3
 import argparse
-from pathlib import Path
+
 import torch
 from torch import nn
-from ml_foundations.experiments.torch_experiments import build_model
+
 from ml_foundations.data.fashion_mnist import make_loaders
-from ml_foundations.training.engine import load_checkpoint,evaluate
+from ml_foundations.experiments.torch_experiments import build_model
+from ml_foundations.training.engine import load_checkpoint, evaluate
 from ml_foundations.utils.reproducibility import get_device
+
 
 def main():
     p=argparse.ArgumentParser(); p.add_argument("--checkpoint",required=True); p.add_argument("--device",default="auto"); p.add_argument("--data-dir",default="data"); args=p.parse_args()

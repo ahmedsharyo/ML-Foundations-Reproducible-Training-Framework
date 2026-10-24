@@ -1,12 +1,15 @@
 from __future__ import annotations
+
 import json
 from pathlib import Path
-import numpy as np
+
 from sklearn.datasets import make_regression, make_classification
 from sklearn.linear_model import LinearRegression, LogisticRegression
 from sklearn.model_selection import train_test_split
+
 from .gradient_check import check_gradient
 from ..models.numpy_models import LinearRegressionGD, LogisticRegressionGD
+
 
 def run(kind,config):
     seed=config.get("seed",42); out=Path(config.get("output_dir","results")); out.mkdir(parents=True,exist_ok=True)

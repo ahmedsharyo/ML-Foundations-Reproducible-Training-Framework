@@ -1,8 +1,12 @@
 #!/usr/bin/env python3
-import argparse, copy, json
+import argparse
+import copy
+import json
 from pathlib import Path
-from ml_foundations.utils.config import load_config
+
 from ml_foundations.experiments.torch_experiments import run
+from ml_foundations.utils.config import load_config
+
 
 def main():
     p=argparse.ArgumentParser(); p.add_argument("--config",required=True); args=p.parse_args(); base=load_config(args.config); results=[]

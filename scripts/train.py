@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
 import argparse
-from ml_foundations.utils.config import load_config
+
 from ml_foundations.experiments.numpy_experiments import run as run_numpy
 from ml_foundations.experiments.torch_experiments import run as run_torch
+from ml_foundations.utils.config import load_config
+
 
 def main():
     p=argparse.ArgumentParser(); p.add_argument("--config",required=True); p.add_argument("--resume"); args=p.parse_args(); cfg=load_config(args.config)

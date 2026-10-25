@@ -7,7 +7,8 @@ from ml_foundations.utils.config import load_config
 
 
 def main():
-    p=argparse.ArgumentParser(); p.add_argument("--config",required=True); p.add_argument("--resume"); args=p.parse_args(); cfg=load_config(args.config)
+    p=argparse.ArgumentParser(); p.add_argument("--config",required=True); p.add_argument("--resume")
+    args=p.parse_args(); cfg=load_config(args.config)
     kind=cfg.get("model",{}).get("type")
     if kind in ("linear","logistic"): run_numpy(kind,cfg)
     else: run_torch(cfg,args.resume)

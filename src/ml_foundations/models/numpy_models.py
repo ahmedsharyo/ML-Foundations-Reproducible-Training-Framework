@@ -59,7 +59,8 @@ class LogisticRegressionGD:
 
     def fit(self, X: np.ndarray, y: np.ndarray) -> "LogisticRegressionGD":
         X, y = np.asarray(X,dtype=float), np.asarray(y,dtype=float).reshape(-1)
-        if X.ndim != 2 or len(X)!=len(y) or not len(X) or not np.isin(y,[0,1]).all(): raise ValueError("Expected matching features and binary labels")
+        if X.ndim != 2 or len(X)!=len(y) or not len(X) or not np.isin(y,[0,1]).all():
+            raise ValueError("Expected matching features and binary labels")
         rng=np.random.default_rng(self.seed); self.weights=np.zeros(X.shape[1]); self.bias=0.; self.history=[]
         for _ in range(self.epochs):
             order=rng.permutation(len(X))

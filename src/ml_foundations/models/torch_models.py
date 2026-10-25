@@ -1,7 +1,9 @@
 """Compact Fashion-MNIST networks; all inputs are NCHW grayscale images."""
 from __future__ import annotations
+
 import torch
 from torch import nn
+
 from .constants import DEFAULT_IMAGE_SIZE, DEFAULT_INPUT_CHANNELS, DEFAULT_NUM_CLASSES
 
 
@@ -32,7 +34,13 @@ class FashionCNN(nn.Module):
         for _ in channels: height,width=height//2,width//2
         if height < 1 or width < 1: raise ValueError("image_size is too small for the configured pooling layers")
         self.image_size=_pair(image_size); self.input_channels=input_channels
-        self.classifier=nn.Sequential(nn.Flatten(),nn.Linear(incoming*height*width,classifier_dim),nn.ReLU(),nn.Dropout(dropout),nn.Linear(classifier_dim,num_classes))
+        self.classifier = nn.Sequential(
+            nn.Flatten(),
+            nn.Linear(incoming * height * width, classifier_dim),
+            nn.ReLU(),
+            nn.Dropout(dropout),
+            nn.Linear(classifier_dim, num_classes),
+        )
     def forward(self,x):
         if x.shape[1] != self.input_channels or tuple(x.shape[-2:]) != self.image_size:
             raise ValueError(f"expected inputs shaped [batch, {self.input_channels}, {self.image_size[0]}, {self.image_size[1]}]")
@@ -40,7 +48,10 @@ class FashionCNN(nn.Module):
 
 class TransformerBlock(nn.Module):
     def __init__(self, dim: int, heads: int, mlp_dim: int, dropout: float):
-        super().__init__(); self.norm1=nn.LayerNorm(dim); self.attn=nn.MultiheadAttention(dim,heads,dropout=dropout,batch_first=True); self.norm2=nn.LayerNorm(dim); self.ff=nn.Sequential(nn.Linear(dim,mlp_dim),nn.GELU(),nn.Dropout(dropout),nn.Linear(mlp_dim,dim)); self.drop=nn.Dropout(dropout)
+        super().__init__(); self.norm1=nn.LayerNorm(dim); self.attn=nn.MultiheadAttention(dim,heads,dropout=dropout,batch_first=True);
+        self.norm2=nn.LayerNorm(dim);
+        self.ff=nn.Sequential(nn.Linear(dim,mlp_dim),nn.GELU(),nn.Dropout(dropout),nn.Linear(mlp_dim,dim));
+        self.drop=nn.Dropout(dropout)
     def forward(self,x):
         # x [batch, patches+1, embedding]; attention weights [batch, heads, query, key].
         z=self.norm1(x); a,_=self.attn(z,z,z,need_weights=False); x=x+self.drop(a); return x+self.drop(self.ff(self.norm2(x)))
@@ -55,7 +66,10 @@ class TinyViT(nn.Module):
             raise ValueError("patch_size must divide each image dimension, and dim must divide heads")
         self.patch_size=patch_size; self.image_size=(height,width); self.input_channels=input_channels
         n=(height//patch_size)*(width//patch_size)
-        self.embed=nn.Linear(input_channels*patch_size*patch_size,dim); self.cls=nn.Parameter(torch.zeros(1,1,dim)); self.pos=nn.Parameter(torch.zeros(1,n+1,dim)); self.blocks=nn.Sequential(*[TransformerBlock(dim,heads,mlp_dim,dropout) for _ in range(depth)]); self.norm=nn.LayerNorm(dim); self.head=nn.Linear(dim,num_classes)
+        self.embed=nn.Linear(input_channels*patch_size*patch_size,dim); self.cls=nn.Parameter(torch.zeros(1,1,dim));
+        self.pos=nn.Parameter(torch.zeros(1,n+1,dim));
+        self.blocks=nn.Sequential(*[TransformerBlock(dim,heads,mlp_dim,dropout) for _ in range(depth)]);
+        self.norm=nn.LayerNorm(dim); self.head=nn.Linear(dim,num_classes)
     def forward(self,x):
         b,c,h,w=x.shape; p=self.patch_size
         if (h,w)!=self.image_size or c!=self.input_channels:

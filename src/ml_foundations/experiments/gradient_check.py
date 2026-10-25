@@ -1,6 +1,9 @@
 import numpy as np
+
 from ..models.numpy_models import LinearRegressionGD, LogisticRegressionGD
 
+
+# Gradient checking compares analytical gradients against numerical approximations using finite differences.
 def check_gradient(kind,epsilon=1e-6):
     rng=np.random.default_rng(7); X=rng.normal(size=(5,3)); y=rng.integers(0,2,size=5).astype(float); w=rng.normal(size=3); b=.2
     cls=LinearRegressionGD if kind=="linear" else LogisticRegressionGD

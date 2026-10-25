@@ -15,7 +15,8 @@ EPOCHS = 1
 
 
 def test_device_and_split():
-    assert get_device("cpu").type=="cpu"; assert deterministic_split(20,.2,9)==deterministic_split(20,.2,9)
+    assert get_device("cpu").type=="cpu";
+    assert deterministic_split(20,.2,9)==deterministic_split(20,.2,9)
 
 def test_fit_and_checkpoint_resume(tmp_path):
     data = TensorDataset(torch.randn(NUM_SAMPLES, INPUT_DIM), torch.randint(0, NUM_CLASSES, (NUM_SAMPLES,)))

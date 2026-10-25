@@ -7,7 +7,7 @@ import torch
 
 
 def _run(model,loader,criterion,device,optimizer=None):
-    train=optimizer is not None; model.train(train); total=correct=count=0; loss_sum=0.
+    train=optimizer is not None; model.train(train); correct=count=0; loss_sum=0.
     context=torch.enable_grad() if train else torch.no_grad()
     with context:
         for x,y in loader:
@@ -29,7 +29,16 @@ def predict(model,loader,device):
 
 def save_checkpoint(path,model,optimizer,epoch,config,history=None,best_metric=None):
     path=Path(path); path.parent.mkdir(parents=True,exist_ok=True)
-    torch.save({"model_state":model.state_dict(),"optimizer_state":optimizer.state_dict() if optimizer else None,"epoch":epoch,"config":config,"history":history or [],"best_metric":best_metric,"torch_rng":torch.get_rng_state()},path)
+    payload = {
+        "model_state": model.state_dict(),
+        "optimizer_state": optimizer.state_dict() if optimizer else None,
+        "epoch": epoch,
+        "config": config,
+        "history": history or [],
+        "best_metric": best_metric,
+        "torch_rng": torch.get_rng_state(),
+    }
+    torch.save(payload, path)
 
 def load_checkpoint(path,model,optimizer=None,map_location="cpu"):
     state=torch.load(path,map_location=map_location,weights_only=False); model.load_state_dict(state["model_state"])
@@ -43,7 +52,13 @@ def fit(model,train_loader,val_loader,optimizer,criterion,device,epochs,checkpoi
     model.to(device); started=time.perf_counter()
     for epoch in range(start,epochs):
         tr=train_one_epoch(model,train_loader,optimizer,criterion,device); va=evaluate(model,val_loader,criterion,device)
-        row={"epoch":epoch+1,"train_loss":tr["loss"],"train_accuracy":tr["accuracy"],"val_loss":va["loss"],"val_accuracy":va["accuracy"],"learning_rate":optimizer.param_groups[0]["lr"]}; history.append(row)
+        row={"epoch":epoch+1,
+             "train_loss":tr["loss"],
+             "train_accuracy":tr["accuracy"],
+             "val_loss":va["loss"],
+             "val_accuracy":va["accuracy"],
+             "learning_rate":optimizer.param_groups[0]["lr"]}
+        history.append(row)
         if va["loss"]<best:
             best=va["loss"]; save_checkpoint(checkpoint_path,model,optimizer,epoch+1,config,history,best)
     return {"history":history,"best_val_loss":best,"training_seconds":time.perf_counter()-started}

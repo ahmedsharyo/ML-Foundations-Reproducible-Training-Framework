@@ -1,5 +1,5 @@
 name: cnn
-model: {type: cnn, channels: [32, 64], dropout: 0.1}
+model: {type: cnn, image_size: 28, input_channels: 1, num_classes: 10, channels: [32, 64], dropout: 0.1, classifier_dim: 128}
 device: auto
 seed: 42
 data_dir: data

@@ -37,7 +37,7 @@ gradient_b = mean(p - y)
 
 The model returns probabilities and thresholded class labels. Both NumPy estimators are checked against central finite differences, and their benchmark scores are compared with scikit-learn.
 
-**MLP.** Flatten 28×28 pixels, apply configurable Linear→ReLU blocks (optional dropout), and emit ten logits. PyTorch computes gradients by autograd; cross-entropy consumes logits.
+**MLP.** Flatten the input image, apply configurable Linear→ReLU blocks (optional dropout), and emit one logit per class. Image size, input channels, and class count are configurable; defaults match Fashion-MNIST's 28×28 grayscale images and ten classes. PyTorch computes gradients by autograd; cross-entropy consumes logits.
 
 **CNN.** Repeated 3×3 convolution, ReLU, and 2×2 max-pooling blocks feed a compact dense classifier.
 

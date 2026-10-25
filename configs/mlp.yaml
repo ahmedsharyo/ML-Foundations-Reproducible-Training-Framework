@@ -1,5 +1,5 @@
 name: mlp
-model: {type: mlp, hidden_dims: [256, 128], dropout: 0.1}
+model: {type: mlp, image_size: 28, input_channels: 1, num_classes: 10, hidden_dims: [256, 128], dropout: 0.1}
 device: auto
 seed: 42
 data_dir: data

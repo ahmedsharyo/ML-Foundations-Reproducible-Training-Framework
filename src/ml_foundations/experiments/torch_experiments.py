@@ -7,6 +7,7 @@ from ..data.fashion_mnist import make_loaders
 from ..models.torch_models import MLP, FashionCNN, TinyViT
 from ..training.engine import fit, evaluate, load_checkpoint
 from ..utils.reproducibility import get_device, set_seed
+from ..models.constants import DEFAULT_IMAGE_SIZE
 
 def build_model(config):
     m=config.get("model",{}); kind=m.get("type","mlp"); args={k:v for k,v in m.items() if k!="type"}
@@ -14,7 +15,7 @@ def build_model(config):
 
 def run(config, resume=None):
     seed=config.get("seed",42); set_seed(seed); device=get_device(config.get("device","auto")); t=config.get("training",{})
-    train,val,test=make_loaders(config.get("data_dir","data"),t.get("batch_size",128),seed,limits=t.get("limit"))
+    train,val,test=make_loaders(config.get("data_dir","data"),t.get("batch_size",128),seed,limits=t.get("limit"),image_size=config.get("model",{}).get("image_size",DEFAULT_IMAGE_SIZE))
     model=build_model(config).to(device); opt=t.get("optimizer",{}); name=opt.get("name","adam").lower(); lr=opt.get("learning_rate",.001); wd=opt.get("weight_decay",0.)
     if name=="sgd": optimizer=torch.optim.SGD(model.parameters(),lr=lr,weight_decay=wd)
     elif name in ("momentum","sgd_momentum"): optimizer=torch.optim.SGD(model.parameters(),lr=lr,momentum=opt.get("momentum",.9),weight_decay=wd)

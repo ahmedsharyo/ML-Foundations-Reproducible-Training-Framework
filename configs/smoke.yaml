@@ -1,5 +1,5 @@
 name: smoke
-model: {type: mlp, hidden_dims: [32], dropout: 0.0}
+model: {type: mlp, image_size: 28, input_channels: 1, num_classes: 10, hidden_dims: [32], dropout: 0.0}
 device: cpu
 seed: 7
 data_dir: data

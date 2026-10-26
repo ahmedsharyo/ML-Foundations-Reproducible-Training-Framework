@@ -6,5 +6,5 @@ __pycache__/
 checkpoints/*
 results/*
 !results/.gitkeep
-data/
+/data/
 .idea/
